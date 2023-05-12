@@ -26,9 +26,7 @@
 
     <!-- Page Wrapper -->
     <div id="wrapper">
-
-            @include('admin.partials.siderbar')
-
+             @include('cliente.partials.siderbar')          
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
             <!-- Main Content -->
@@ -78,8 +76,7 @@
 
     </nav>
     <!--  End of Topbar -->
-            @yield('content')
-            
+            @yield('content')       
 </div>
 <!-- End of Main Content -->
 

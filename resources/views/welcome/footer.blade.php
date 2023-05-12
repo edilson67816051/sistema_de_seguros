@@ -1,14 +1,13 @@
 <footer class="footer">
     <section class="footer__container container">
         <nav class="nav nav--footer">
-            <h2 class="footer__title">Curso CSS.</h2>
 
             <ul class="nav__link nav__link--footer">
                 <li class="nav__items">
-                    <a href="#" class="nav__links">Inicio</a>
+                    <a class="nav__links" data-toggle="modal" data-target="#loginModal">Login</a>
                 </li>
                 <li class="nav__items">
-                    <a href="#" class="nav__links">Acerca de</a>
+                    <a class="nav__links" data-toggle="modal" data-target="#registerModal">Register</a>
                 </li>
                 <li class="nav__items">
                     <a href="#" class="nav__links">Contacto</a>
@@ -20,7 +19,7 @@
         </nav>
 
         <form class="footer__form" action="https://formspree.io/f/mknkkrkj" method="POST">
-            <h2 class="footer__newsletter">Suscribete a la newsletter</h2>
+            <h2 class="footer__newsletter">Suscribete como cliente de fortaleza</h2>
             <div class="footer__inputs">
                 <input type="email" placeholder="Email:" class="footer__input" name="_replyto">
                 <input type="submit" value="Registrate" class="footer__submit">
