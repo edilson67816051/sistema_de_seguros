@@ -38,7 +38,7 @@
     </li>
     <hr class="sidebar-divider">
     <li class="nav-item active">
-        <a class="nav-link" href="/admin">
+        <a class="nav-link" href="{{url('/cliente/pago')}}">
             <i class="fa fa-address-card"></i>
         <span>Pagos</span></a>
        

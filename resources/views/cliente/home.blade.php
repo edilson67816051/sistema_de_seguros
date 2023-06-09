@@ -26,9 +26,6 @@
      <li class="nav__items">
       <a class="nav__links" data-toggle="modal" data-target="#registerModal">Actualiza tus datos</a>
     </li>
-    <li class="nav__items">
-      <a class="nav__links" data-toggle="modal" data-target="#contracenaModal">Cambia tu contraceña</a>
-    </li>
     </ul>
    
    </form>
@@ -112,33 +109,32 @@
   <div class="modal-dialog">
       <div class="modal-content">
           <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Cambia Contracena</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Cambiar Contracena</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
           </button>
           </div>
           <div class="modal-body">
-              <form method="POST" action="{{ route('register') }}">
+              <form method="GET" action="cliente/actualizarpassword">
                   @csrf
                   <div class="row mb-3">
-                    <label for="password" class="col-md-4 col-form-label text-md-end">{{ __('Contraceña anterior') }}</label>
+                        <label for="password" class="col-md-4 col-form-label text-md-end">{{ __('Contraceña actual') }}</label>
+                        <div class="col-md-6">
+                            <input id="password_a" type="password" class="form-control @error('password') is-invalid @enderror" name="password_a" required autocomplete="new-password">
 
-                    <div class="col-md-6">
-                        <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
-
-                        @error('password')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
-                    </div>
-                </div>
+                            @error('password')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                    </div >
 
                   <div class="row mb-3">
-                    <label for="password" class="col-md-4 col-form-label text-md-end">{{ __('Nueva contraceña') }}</label>
+                    <label for="password_n" class="col-md-4 col-form-label text-md-end">{{ __('Nueva contraceña') }}</label>
 
                     <div class="col-md-6">
-                        <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
+                        <input id="password_n" type="password" class="form-control @error('password') is-invalid @enderror" name="password_n" required autocomplete="new-password">
 
                         @error('password')
                             <span class="invalid-feedback" role="alert">
@@ -155,6 +151,7 @@
                         <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
                     </div>
                 </div>
+                
                   <div class="modal-footer">
                       <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                       <button type="submit" class="btn btn-primary">

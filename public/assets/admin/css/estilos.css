@@ -5,9 +5,14 @@
     --color-title: #001A49;
 }
 
+
+
 body {
     font-family: 'Poppins', sans-serif;
 }
+
+
+
 
 .container {
     width: 90%;
@@ -16,6 +21,12 @@ body {
     overflow: hidden;
     padding: var(--padding-container);
 }
+
+
+
+
+
+
 
 .hero {
     width: 100%;

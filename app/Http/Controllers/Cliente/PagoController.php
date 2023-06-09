@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers\Cliente;
 
-use App\Http\Controllers\Controller;
+use Carbon\Carbon;
+use App\Models\Pago;
+use App\Models\Poliza;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class PagoController extends Controller
 {
@@ -14,7 +19,61 @@ class PagoController extends Controller
      */
     public function index()
     {
-        return view('cliente.pago.index');
+        $polizas = DB::table('polizas')
+        ->where('users_id','=',Auth::user()->id)
+        ->where('estado','=','1')  
+        ->get();
+
+        return view('cliente.pago.index',['polizas'=>$polizas]);
+    }
+
+    public function pagar($id)
+    {
+        $poliza = Poliza::find($id);
+        $pago = Pago::where('estado', 'Impaga')
+            ->where('poliza_id', $poliza->id)
+            ->orderBy('fecha_limite_pago')
+            ->limit(1)
+            ->first();
+        return view('cliente.pago.pagar', ['poliza' => $poliza,'pago'=>$pago]);
+    }
+
+    public function metodopago(Request $request,$id)
+    {
+        $pago = Pago::find($id);
+
+        if (request('metodo_pago')=='Qr')
+            return view('cliente.pago.pagoqr',['pago'=>$pago]); 
+        dd(request('metodo_pago'));
+    }
+
+    public function finalizarpagorqr($id,Request $request)
+    {
+        $pago = Pago::find($id);       
+        $pago->estado='Pagado';
+        $pago->metodo='Qr';
+        $pago->fecha_pago= Carbon::now();;
+
+        
+
+        if ($request->hasFile('imagen')){
+            $imagen=$request->file('imagen');
+            $nombre = 'Qr'.(202*10+$id).'.'.$imagen->getClientOriginalExtension();
+            $url=public_path('imagenes/comprobante/qr/');
+            $request->imagen->move($url,$nombre);
+            $pago->comprobante=$nombre;
+        }
+        $pago->update();
+
+        $poliza = Poliza::select('polizas.*')
+        ->join('pagos', 'polizas.id', '=', 'pagos.poliza_id')
+        ->where('pagos.id', $pago->id)
+        ->first();
+        $poliza->activo =1;
+        $poliza->update();
+
+
+        return redirect('/cliente/pago');
     }
 
     /**
@@ -46,7 +105,11 @@ class PagoController extends Controller
      */
     public function show($id)
     {
-        //
+        $poliza = Poliza::find($id);
+        $pago = Pago::where('estado', 'Pagado')
+            ->where('poliza_id', $poliza->id)
+            ->get();
+        return view('cliente.pago.show', ['pago'=>$pago]);
     }
 
     /**

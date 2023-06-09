@@ -15,3 +15,4 @@ Route::resource('users',UserController::class)->names('admin.users');
 Route::resource('coberturas',CoberturaController::class);
 
 
+

@@ -19,24 +19,25 @@ return new class extends Migration
             $table->timestamp('fecha_inicio');
             $table->timestamp('fecha_final');
             $table->string('moneda');
-            $table->string('metodo_pago');
-            $table->double('prima_neta');  
-            $table->double('derecho_poliza');  
+            $table->string('tipo_pago');
+            $table->double('prima_neta');   
             $table->double('iva');
+            $table->double('prima_total');
             $table->double('prima_total_anual');
+            $table->double('prima_total_semestral');
+            $table->double('prima_total_mensual');
             $table->unsignedBigInteger('vehiculo_id');  
             $table->unsignedBigInteger('users_id');  
+            $table->bigInteger('activo');
             $table->bigInteger('estado');  
             $table->timestamps();
 
             $table->foreign('vehiculo_id')
-            ->references('id')->on('vehiculos')
-            ->onDelete('set null');
+            ->references('id')->on('vehiculos');
 
             
             $table->foreign('users_id')
-            ->references('id')->on('users')
-            ->onDelete('set null');
+            ->references('id')->on('users');
         });
         Schema::create('poliza_coberturas', function (Blueprint $table) {
 
@@ -45,12 +46,10 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreign('poliza_id')
-            ->references('id')->on('polizas')
-            ->onDelete('set null');
+            ->references('id')->on('polizas');
 
             $table->foreign('cobertura_id')
-            ->references('id')->on('coberturas')
-            ->onDelete('set null');
+            ->references('id')->on('coberturas');
         });
     }
 

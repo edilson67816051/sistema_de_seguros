@@ -12,14 +12,14 @@
         </ul>
     </div>
    @endif
-        <form class="row g-4" action="/cliente/vehiculo" method="POST" enctype="multipart/form-data">
+        <form class="row g-4" action="/cliente/poliza" method="POST" enctype="multipart/form-data">
             @csrf
             
             <div class="row col-md-6">
                 <div class="col-md-12">
                     <label for="tipo_poliza">vehiculo</label>
                         <select name="vehiculo" class="form-control">
-                            <option selected disabled> Elige una  ...</option>
+                           
                             @foreach ($vehiculos as $item)
                               <option value={{$item->id}} >{{$item->marca}} {{$item->placa}}</option>
                             @endforeach
@@ -34,30 +34,41 @@
                 </div> 
                 <div class="col-md-6">
                     <label for="tipo_poliza">Tipo Pago</label>
-                        <select name="moneda" class="form-control">
-                              <option value="visa" > Visa</option>
-                              <option value="qr" > QR</option>
-                              <option value="deposito" >Deposito</option>
+                        <select name="tipo_pago" class="form-control">
+                              <option value="a" >Anual</option>
+                              <option value="s" >Semestral</option>
+                              <option value="m" >Mensual</option>
                         </select>
                 </div> 
                 <div class="col-md-6">
                     <label for="fecha_inicio">Fecha Inicio</label>
-                    <input type="date" class="form-control" value="2023-05-01" />
+                    <input name="fecha_inicio" type="date" class="form-control" value="{{$fecha_actual}}" />
 
                 </div> 
                 <div class="col-md-6">
-                    <label for="fecha_Final">Fecha Final</label>
-                    <input type="date" class="form-control" value="2023-05-01" />
+                    <label for="tipo_poliza">Duracion del Contrato</label>
+                        <select name="anio" class="form-control">
+                              <option value="1" > 1 Año</option>
+                              <option value="2" > 2 año</option>
+                              <option value="3" > 3 Año</option>
+                              <option value="4" > 4 año</option>
+                              <option value="5" > 5 Año</option>
+                              <option value="6" > 6 año</option>
+                              <option value="7" > 7 Año</option>
+                              <option value="8" > 8 año</option>
+                              <option value="9" > 9 Año</option>
+                              <option value="10" > 10 año</option>
+                        </select>
 
                 </div> 
                
                 
             </div> 
             <div class="col-md-6">
-               
+                <p class="h4">Coberturas</p>
                 @foreach ($coberturas as $item)
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                    <input class="form-check-input" type="checkbox" name="{{$item->id}}" value="{{$item->descripcion}}. Costo : {{$item->costo}}" id="flexCheckDefault">
                     <label class="form-check-label" for="flexCheckDefault">
                         {{$item->nombre}}
                     </label>
