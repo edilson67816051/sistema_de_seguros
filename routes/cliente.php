@@ -5,10 +5,14 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Cliente\PagoController;
 use App\Http\Controllers\Cliente\PolizaController;
 use App\Http\Controllers\Cliente\VehiculoController;
+use App\Http\Controllers\Cliente\SiniestroController;
 
 Route::resource('vehiculo',VehiculoController::class);
 Route::resource('poliza',PolizaController::class);
 Route::resource('pago',PagoController::class);
+
+Route::resource('siniestro',SiniestroController::class);
+
 
 Route::post('/confirmarPoliza',[PolizaController::class,'confirmar'])->name('confirmarpoliza');
 

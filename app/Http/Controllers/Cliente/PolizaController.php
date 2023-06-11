@@ -83,12 +83,9 @@ class PolizaController extends Controller
 
         $this->generatepagos(request('tipo_pago'),$poliza->prima_total,request('anio'),$poliza->id);
         $poliza->nro_poliza =2023*1000+$poliza->id; 
-        $poliza->update();
+        $poliza->update(); 
 
-        
-
-        return redirect("cliente/poliza");
-        
+        return redirect("cliente/poliza");       
     }
 
     public function generatepagos($tipo,$monto_total,$anio,$id){
@@ -147,7 +144,9 @@ class PolizaController extends Controller
 
     public function show($id)
     {
-        //
+        $siniestro = Siniestro::find($id);
+        $imagen= Imagen::all();
+        return view('cliente.siniestro.show',['siniestro'=>$siniestro],['imagenes'=>$imagen]);
     }
 
     /**

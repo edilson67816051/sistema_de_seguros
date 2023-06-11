@@ -45,7 +45,7 @@
     </li>
     <hr class="sidebar-divider">
     <li class="nav-item active">
-        <a class="nav-link" href="/admin">
+        <a class="nav-link" href="{{url('/cliente/siniestro')}}">
             <i class="fa fa-car"></i>
         <span>Siniestro</span></a>  
        

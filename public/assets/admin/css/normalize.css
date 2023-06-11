@@ -13,6 +13,16 @@
     box-sizing: border-box;
 } 
 
+#map {
+    height: 400px;
+}  
+    
+.preview-image {
+    max-width: 200px;
+    max-height: 200px;
+    margin-top: 10px;
+}
+
 html {
     line-height: 1.15;
     /* 1 */

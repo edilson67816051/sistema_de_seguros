@@ -62,7 +62,8 @@
             data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <a class="collapse-item" href="">Polisas</a>
-                <a class="collapse-item" href="">Siniestros</a>
+                <a class="collapse-item" href="{{url('admin/adminsiniestro')}}">Siniestros</a>
+                <a class="collapse-item" href="{{url('admin/evaluacion')}}">Evaluacion</a>
                 <a class="collapse-item" href="">Cliente</a>
             </div>
         </div>

@@ -53,8 +53,7 @@ class PagoController extends Controller
         $pago->estado='Pagado';
         $pago->metodo='Qr';
         $pago->fecha_pago= Carbon::now();;
-
-        
+     
 
         if ($request->hasFile('imagen')){
             $imagen=$request->file('imagen');
@@ -63,6 +62,7 @@ class PagoController extends Controller
             $request->imagen->move($url,$nombre);
             $pago->comprobante=$nombre;
         }
+
         $pago->update();
 
         $poliza = Poliza::select('polizas.*')
@@ -106,8 +106,8 @@ class PagoController extends Controller
     public function show($id)
     {
         $poliza = Poliza::find($id);
-        $pago = Pago::where('estado', 'Pagado')
-            ->where('poliza_id', $poliza->id)
+        $pago = Pago::
+        where('poliza_id', $poliza->id)
             ->get();
         return view('cliente.pago.show', ['pago'=>$pago]);
     }
