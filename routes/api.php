@@ -22,15 +22,14 @@ Route::post("/signup", [AuthController::class, "signup"]);
 // Route::get("/user", [AuthController::class, "getUser"]);
 
 
-Route::post("/editarVehiculos",[ClienteController::class,"editarVehiculo"]);
-
+Route::post("/editarVehiculos", [ClienteController::class, "editarVehiculo"]);
+Route::post("/realizarPago",[ClienteController::class, "realizarPago"]);
 
 //TODO: RUTAS PROTEGIDAS POR SANCTUM
 Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post("/logout", [AuthController::class, "logout"]);
-    Route::get("/listaVehiculos",[ClienteController::class,"obtenerListaVehiculos"]);
-    Route::post("/eliminarVehiculo",[ClienteController::class,"eliminarVehiculo"]);
-
-
-});  
-    
+    Route::get("/listaVehiculos", [ClienteController::class, "obtenerListaVehiculos"]);
+    Route::post("/eliminarVehiculo", [ClienteController::class, "eliminarVehiculo"]);
+    Route::get("/listaPagos", [ClienteController::class, "ListarPagos"]);
+    Route::post("/detallePago", [ClienteController::class, "DetallePago"]);
+});

@@ -21,7 +21,7 @@ class PagoController extends Controller
     {
         $polizas = DB::table('polizas')
         ->where('users_id','=',Auth::user()->id)
-        ->where('estado','=','1')  
+        ->where('estado','=','1')
         ->get();
 
         return view('cliente.pago.index',['polizas'=>$polizas]);
@@ -43,17 +43,17 @@ class PagoController extends Controller
         $pago = Pago::find($id);
 
         if (request('metodo_pago')=='Qr')
-            return view('cliente.pago.pagoqr',['pago'=>$pago]); 
+            return view('cliente.pago.pagoqr',['pago'=>$pago]);
         dd(request('metodo_pago'));
     }
 
     public function finalizarpagorqr($id,Request $request)
     {
-        $pago = Pago::find($id);       
+        $pago = Pago::find($id);
         $pago->estado='Pagado';
         $pago->metodo='Qr';
-        $pago->fecha_pago= Carbon::now();;
-     
+        $pago->fecha_pago= Carbon::now();
+
 
         if ($request->hasFile('imagen')){
             $imagen=$request->file('imagen');

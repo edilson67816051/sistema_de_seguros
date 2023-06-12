@@ -16,7 +16,7 @@ class VehiculoController extends Controller
     {
         $vehiculos = DB::table('vehiculos')
         ->where('users_id','=',Auth::user()->id)
-        ->where('estado','=','1')  
+        ->where('estado','=','1')
         ->get();
 
         return view('cliente.vehiculo.index',['vehiculos'=>$vehiculos]);
@@ -43,12 +43,14 @@ class VehiculoController extends Controller
         $vehiculo->descripcion = request('descripcion');
         $vehiculo->estado = 1;
 
+
         if ($request->hasFile('imagen')){
             $imagen=$request->file('imagen');
             $nombre = request('placa').'.'.$imagen->getClientOriginalExtension();
             $url=public_path('imagenes/vehiculos');
             $request->imagen->move($url,$nombre);
             $vehiculo->imagen=$nombre;
+            $vehiculo->path="http://192.168.100.180:8000/imagenes/vehiculos/".$nombre;
         }
         $vehiculo->save();
         return redirect('/cliente/vehiculo');
@@ -56,10 +58,10 @@ class VehiculoController extends Controller
 
     public function show($id)
     {
-        
+
     }
 
-   
+
     public function edit($id)
     {
         $vehiculo = Vehiculo::find($id);
@@ -87,6 +89,8 @@ class VehiculoController extends Controller
             $url=public_path('imagenes/vehiculos');
             $request->imagen->move($url,$nombre);
             $vehiculo->imagen=$nombre;
+            $vehiculo->path="http://192.168.100.180:8000/imagenes/vehiculos/".$nombre;
+
         }
         $vehiculo->update();
         return redirect('/cliente/vehiculo');
@@ -96,7 +100,7 @@ class VehiculoController extends Controller
     {
         $vehiculo = Vehiculo::find($id);
         $vehiculo -> estado=0;
- 
+
         $vehiculo->update();
         return redirect()->route('vehiculo.index');
     }
