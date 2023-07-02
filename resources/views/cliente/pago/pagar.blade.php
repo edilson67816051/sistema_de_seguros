@@ -6,8 +6,17 @@
             max-width: 250px;
             height: auto;
         }
-    </style>
+    </style>   
+     
     <h3 class="text-center mt-5">Realizar el Pago</h3>
+ 
+    @if(session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+
+
     <form class="text-center mt-4" action="{{route('metodopago',$pago->id)}}" method="GET" enctype="multipart/form-data">
         <div class="row col-md-12">
             <div class="col-md-4">

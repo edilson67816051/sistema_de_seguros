@@ -32,6 +32,7 @@
     </div>
 
     <!-- Nav Item - Pages Collapse Menu -->
+    @can('admin.administracion')
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#administracion"
             aria-expanded="true" aria-controls="collapseTwo">
@@ -43,46 +44,55 @@
                 <a class="collapse-item" href="{{url('admin/users')}}" href="buttons.html">
                     <i class="fas fa-users fa-fw"></i> Usuario
                 </a>
-                <a class="collapse-item" href="cards.html">
+                <a class="collapse-item" href="{{route('admin.roles.index')}}">
                     <i class="fas fa-id-card fa-fw"></i> Roles</a>
                 <a class="collapse-item" href="cards.html">
                     <i class="fas fa-hand-paper fa-fw"></i> Permiso</a>
+                    <a class="collapse-item" href="{{url('admin/bitacora')}}">
+                        <i class="fas fa-hand-paper fa-fw"></i> Bitacora</a>    
             </div>
         </div>
     </li>
+    @endcan
+
+    @can('admin.seguros')
+       <!-- Nav Item - Utilities Collapse Menu -->
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#seguros"
+                aria-expanded="true" aria-controls="collapseUtilities">
+                <i class="fas fa-fw fa-wrench"></i>
+                <span>Seguros</span>
+            </a>
+            <div id="seguros" class="collapse" aria-labelledby="headingUtilities"
+                data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <a class="collapse-item" href="">Polisas</a>
+                    <a class="collapse-item" href="{{url('admin/adminsiniestro')}}">Siniestros</a>
+                    <a class="collapse-item" href="{{url('admin/evaluacion')}}">Evaluacion</a>
+                    <a class="collapse-item" href="{{route('admin.client.index')}}">Cliente</a>
+                </div>
+            </div>
+        </li> 
+    @endcan
+    
 
     <!-- Nav Item - Utilities Collapse Menu -->
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#seguros"
-            aria-expanded="true" aria-controls="collapseUtilities">
-            <i class="fas fa-fw fa-wrench"></i>
-            <span>Seguros</span>
-        </a>
-        <div id="seguros" class="collapse" aria-labelledby="headingUtilities"
-            data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href="">Polisas</a>
-                <a class="collapse-item" href="{{url('admin/adminsiniestro')}}">Siniestros</a>
-                <a class="collapse-item" href="{{url('admin/evaluacion')}}">Evaluacion</a>
-                <a class="collapse-item" href="">Cliente</a>
+    @can('admin.finanza')
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#finanza"
+                aria-expanded="true" aria-controls="collapseUtilities">
+                <i class="fas fa-fw fa-wrench"></i>
+                <span>Finanza</span>
+            </a>
+            <div id="finanza" class="collapse" aria-labelledby="headingUtilities"
+                data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <a class="collapse-item" href=""><i class="fa fa-address-card" aria-hidden="true"></i> Pagos</a>
+                </div>
             </div>
-        </div>
-    </li>
+        </li>
+    @endcan
 
-    <!-- Nav Item - Utilities Collapse Menu -->
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#finanza"
-            aria-expanded="true" aria-controls="collapseUtilities">
-            <i class="fas fa-fw fa-wrench"></i>
-            <span>Finanza</span>
-        </a>
-        <div id="finanza" class="collapse" aria-labelledby="headingUtilities"
-            data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href=""><i class="fa fa-address-card" aria-hidden="true"></i> Pagos</a>
-            </div>
-        </div>
-    </li>
 
     <!-- Divider -->
     <hr class="sidebar-divider">

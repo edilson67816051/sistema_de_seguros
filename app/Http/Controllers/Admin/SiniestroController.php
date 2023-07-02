@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Imagen;
+use App\Models\Bitacora;
 use App\Models\Siniestro;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -13,6 +14,8 @@ class SiniestroController extends Controller
     public function index()
     {
         $siniestro = Siniestro::all();
+        $bitacora = new Bitacora();
+        $bitacora->bitacora('Listo lo siniesto ');
         return view('admin.siniestro.index',['siniestro'=>$siniestro]);
     }
 
@@ -47,6 +50,9 @@ class SiniestroController extends Controller
     {
         $siniestro = Siniestro::find($id);
         $imagen= Imagen::all();
+
+        $bitacora = new Bitacora();
+        $bitacora->bitacora('Detallo un siniestro con el codigo :'.$siniestro->id);
         return view('admin.siniestro.show',['siniestro'=>$siniestro],['imagenes'=>$imagen]);
     }
 

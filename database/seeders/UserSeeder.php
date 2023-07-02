@@ -35,5 +35,18 @@ class UserSeeder extends Seeder
             'estado'=>'1',
         ])->assignRole('cliente');
 
+        User::Create([
+            'name'=>'Elmer',
+            'apellido_p'=>'Serrano',
+            'apellido_m'=>'Miranda',
+            'email'=>'e@gmail.com',
+            'password'=> bcrypt('12345678'),
+            'ci'=>'8554865',
+            'celular'=>'78456051',
+            'usuario'=>'1',
+            'cliente'=>'0',
+            'estado'=>'1',
+        ])->assignRole('mecanico');
+
     }
 }

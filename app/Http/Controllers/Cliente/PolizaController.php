@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Cliente;
 use Carbon\Carbon;
 use App\Models\Pago;
 use App\Models\Poliza;
+use App\Models\Bitacora;
 use App\Models\Cobertura;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -24,6 +25,9 @@ class PolizaController extends Controller
         ->where('users_id','=',Auth::user()->id)
         ->where('estado','=','1')  
         ->get();
+
+        $bitacora = new Bitacora();
+        $bitacora->bitacora('Listo las poliza');
 
         return view('cliente.poliza.index',['polizas'=>$polizas]);
     }
@@ -84,12 +88,16 @@ class PolizaController extends Controller
         $this->generatepagos(request('tipo_pago'),$poliza->prima_total,request('anio'),$poliza->id);
         $poliza->nro_poliza =2023*1000+$poliza->id; 
         $poliza->update(); 
-
+        $bitacora = new Bitacora();
+        $bitacora->bitacora('Creo un nuevo Poliza id : '.$poliza->id);
         return redirect("cliente/poliza");       
     }
 
     public function generatepagos($tipo,$monto_total,$anio,$id){
+       
         if ($tipo=='m'){
+            $bitacora = new Bitacora();
+            $bitacora->bitacora('Se genero pagos de forma Mensual');
             $monto_mensual=$monto_total/($anio*12);
             $fecha_actual=Carbon::now();
             for($i=1; $i<=($anio*12);$i++){
@@ -107,6 +115,8 @@ class PolizaController extends Controller
             }
         }
         if ($tipo=='s'){
+            $bitacora = new Bitacora();
+            $bitacora->bitacora('Se genero pagos de forma Semestral');
             $monto_semestral=$monto_total/($anio*2);
             $fecha_actual=Carbon::now();
             for($i=1; $i<=($anio*2);$i++){
@@ -123,6 +133,8 @@ class PolizaController extends Controller
             }
         }
         if ($tipo=='a'){
+            $bitacora = new Bitacora();
+            $bitacora->bitacora('Se genero pagos de forma Anual');
             $monto_anual=$monto_total/($anio);
             $fecha_actual=Carbon::now();
             for($i=1; $i<=($anio);$i++){
@@ -146,6 +158,8 @@ class PolizaController extends Controller
     {
         $siniestro = Siniestro::find($id);
         $imagen= Imagen::all();
+        $bitacora = new Bitacora();
+        $bitacora->bitacora('Detallo un siniestro con la id : '.$id);
         return view('cliente.siniestro.show',['siniestro'=>$siniestro],['imagenes'=>$imagen]);
     }
 

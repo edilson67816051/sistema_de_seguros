@@ -1,9 +1,12 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\HomeController;
 
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\MailController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\CotizacionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,6 +24,13 @@ Route::get('/', function () {
 });
 
 Auth::routes();
+
+Route::resource('cotizacion',CotizacionController::class)->names('cotizacion');
+
+Route::get('cotizacion/{id}/pdf', [CotizacionController::class, 'exportToPdf'])->name('cotizacion.pdf');
+
+Route::get('/enviar-correo/{cotizacionId}', [MailController::class, 'sendEmail'])->name('enviar.correo');
+
 
 
 

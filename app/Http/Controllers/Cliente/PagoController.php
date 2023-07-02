@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Cliente;
 use Carbon\Carbon;
 use App\Models\Pago;
 use App\Models\Poliza;
+use App\Models\Bitacora;
+use App\Models\Siniestro;
+use App\Models\Evaluacion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -23,13 +26,13 @@ class PagoController extends Controller
         ->where('users_id','=',Auth::user()->id)
         ->where('estado','=','1')
         ->get();
-
+        $bitacora = new Bitacora();
+        $bitacora->bitacora('Listo los pagos');
         return view('cliente.pago.index',['polizas'=>$polizas]);
     }
 
-    public function pagar($id)
+    public function pagar(Poliza $poliza)
     {
-        $poliza = Poliza::find($id);
         $pago = Pago::where('estado', 'Impaga')
             ->where('poliza_id', $poliza->id)
             ->orderBy('fecha_limite_pago')
@@ -38,9 +41,27 @@ class PagoController extends Controller
         return view('cliente.pago.pagar', ['poliza' => $poliza,'pago'=>$pago]);
     }
 
+    public function pagar_e(Siniestro $siniestro)
+    {
+        $evaluacion = Evaluacion::where('siniestro_id',$siniestro->id)
+        ->first();
+
+        $campos = DB::table('campo_evaluacions')
+            ->where('evaluacion_id', '=',$evaluacion->id)
+            ->groupBy('evaluacion_id', 'id', 'nombre', 'descripcion', 'created_at', 'updated_at')
+            ->get();
+        $monto = $campos[2]->descripcion;
+            return view('cliente.pago.pagar_e', compact('evaluacion','siniestro','monto'))
+            ->with('success', 'Se realizará el pago de la evaluación del siniestro.');
+        
+    }
+
     public function metodopago(Request $request,$id)
     {
         $pago = Pago::find($id);
+
+        $bitacora = new Bitacora();
+        $bitacora->bitacora('Seleciono el metodo de Pago '.request('metodo_pago'));
 
         if (request('metodo_pago')=='Qr')
             return view('cliente.pago.pagoqr',['pago'=>$pago]);
@@ -72,7 +93,8 @@ class PagoController extends Controller
         $poliza->activo =1;
         $poliza->update();
 
-
+        $bitacora = new Bitacora();
+        $bitacora->bitacora('Se realizo el pago con Qr la id de la transaccion :'.$pago->id);
         return redirect('/cliente/pago');
     }
 
@@ -109,6 +131,8 @@ class PagoController extends Controller
         $pago = Pago::
         where('poliza_id', $poliza->id)
             ->get();
+            $bitacora = new Bitacora();
+            $bitacora->bitacora('Observo la Historia de Pago de la poliza :'.$poliza->nro_poliza);    
         return view('cliente.pago.show', ['pago'=>$pago]);
     }
 

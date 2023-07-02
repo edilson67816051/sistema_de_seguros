@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Carbon\Carbon;
+use App\Models\Bitacora;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\ConfirmsPasswords;
 
@@ -34,7 +37,9 @@ class ConfirmPasswordController extends Controller
      * @return void
      */
     public function __construct()
-    {
+    {  
         $this->middleware('auth');
+        
+        
     }
 }

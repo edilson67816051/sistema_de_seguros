@@ -64,7 +64,7 @@
                 @endauth
                 @endif
                 <li class="nav__items">
-                    <a href="#" class="nav__links" >Contacto</a>
+                    <a class="nav__links" data-toggle="modal" data-target="#cotizacionModal">Cotizacion</a>
                 </li>
                 <li class="nav__items">
                     <a href="#" class="nav__links">Blog</a>

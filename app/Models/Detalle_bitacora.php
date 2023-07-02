@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Detalle extends Model
+class Detalle_bitacora extends Model
 {
     use HasFactory;
 }

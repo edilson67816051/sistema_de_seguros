@@ -46,7 +46,7 @@
                                 <a href="{{route('adminsiniestro.show',$item->id)}}"><button type="button" class="btn btn-primary">
                                     <i class="fa fa-info-circle"></i>
                                 </button></a>
-                                <a href="{{route('evaluacion.create',$item->id)}}"><button type="button" class="btn btn-success">
+                                <a href="{{route('evaluacion.show',$item->id)}}"><button type="button" class="btn btn-success">
                                     <i class="fa fa-sticky-note"></i>
                                 </button></a>
                                 <button type="submit" class="btn btn-danger"><i class="fa fa-trash"></i></button>

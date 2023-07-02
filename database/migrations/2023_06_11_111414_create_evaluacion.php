@@ -14,31 +14,26 @@ return new class extends Migration
     public function up()
     {
         Schema::create('evaluacions', function (Blueprint $table) {
-            $table->id();
-            $table->timestamp('fecha');            
-            $table->string('descripcion');
-            $table->string('monto');
+            $table->id();         
             $table->unsignedBigInteger('users_id'); 
             $table->unsignedBigInteger('siniestro_id'); 
             $table->timestamps();
 
             $table->foreign('users_id')
             ->references('id')->on('users');
-
             $table->foreign('siniestro_id')
             ->references('id')->on('siniestros');
         });
 
-        Schema::create('detalles', function (Blueprint $table) {
+        Schema::create('campo_evaluacions', function (Blueprint $table) {
             $table->id();          
-            $table->string('detalle');
-            $table->float('costo');
+            $table->string('nombre');
+            $table->string('descripcion');
             $table->unsignedBigInteger('evaluacion_id'); 
             $table->timestamps();
 
             $table->foreign('evaluacion_id')
             ->references('id')->on('evaluacions');
-
 
         });
     }

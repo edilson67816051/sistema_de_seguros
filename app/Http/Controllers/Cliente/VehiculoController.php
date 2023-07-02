@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Cliente;
 
+use App\Models\Bitacora;
 use App\Models\Vehiculo;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\Detalle;
+
 use Illuminate\Support\Facades\Auth;
 use App\Providers\RouteServiceProvider;
 
@@ -19,6 +22,9 @@ class VehiculoController extends Controller
         ->where('estado','=','1')
         ->get();
 
+        $bitacora = new Bitacora();
+        $bitacora->bitacora('visito los vehiculos');
+        
         return view('cliente.vehiculo.index',['vehiculos'=>$vehiculos]);
     }
 
@@ -53,6 +59,8 @@ class VehiculoController extends Controller
             $vehiculo->path="http://192.168.100.180:8000/imagenes/vehiculos/".$nombre;
         }
         $vehiculo->save();
+        $bitacora = new Bitacora();
+        $bitacora->bitacora('Creo un nuevo vehiculos');
         return redirect('/cliente/vehiculo');
     }
 
@@ -93,6 +101,10 @@ class VehiculoController extends Controller
 
         }
         $vehiculo->update();
+
+        $bitacora = new Bitacora();
+        $bitacora->bitacora('Modifico un vehiculos');
+        
         return redirect('/cliente/vehiculo');
     }
 
@@ -102,6 +114,12 @@ class VehiculoController extends Controller
         $vehiculo -> estado=0;
 
         $vehiculo->update();
+
+        $bitacora = new Bitacora();
+        $bitacora->bitacora('Elimino un vehiculo');
+
         return redirect()->route('vehiculo.index');
     }
+
+    
 }

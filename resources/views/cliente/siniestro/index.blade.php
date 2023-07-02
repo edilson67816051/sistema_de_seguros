@@ -3,6 +3,19 @@
 
 <!-- DataTales Example -->
 <div class="card shadow mb-4">
+
+    @if(session('error'))
+    <div class="alert alert-danger">
+        {{ session('error') }}
+        </div>
+    @endif
+    
+    @if(session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+    @endif
+
     <div class="card-header py-3">
         <h5 class="m-0 font-weight-bold text-primary">Siniestro <a href="{{url("cliente/siniestro/create")}}" >
             <button type="button" class="btn btn-success">Reportar un nuevo siniestro</button></a> 
@@ -38,8 +51,7 @@
                         <td>{{$item->fecha_siniestro}}</td>
                         <td>{{$item->detalle}}</td>
                         <td>{{$item->activo}}</td>
-                        <td>
-                                
+                        <td>                              
 
                             <form action="{{route('siniestro.destroy',$item->id)}}" method="POST">
                                 @csrf
@@ -47,6 +59,11 @@
                                 <a href="{{route('siniestro.show',$item->id)}}"><button type="button" class="btn btn-primary">
                                     <i class="fa fa-info-circle"></i>
                                 </button></a>
+                                @if ($item->activo == 'Evaluado')
+                                <a href="{{ route('pagar_e', ['siniestro' => $item]) }}">
+                                    <button type="button" class="btn btn-success">Pagar</button>
+                                </a> 
+                                @endif                             
                                 <button type="submit" class="btn btn-danger"><i class="fa fa-trash"></i></button>
                              </form>
                      

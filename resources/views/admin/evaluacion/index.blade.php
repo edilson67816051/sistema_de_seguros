@@ -4,11 +4,7 @@
 <!-- DataTales Example -->
 <div class="card shadow mb-4">
     <div class="card-header py-3">
-        <h5 class="m-0 font-weight-bold text-primary">Evaluacion Realizadas <a href="{{url("admin/evaluacion/create")}}" >
-            <button type="button" class="btn btn-success">Relizar una Nueva evaluacion</button></a> 
-            
-        </h5>
-        
+        <h5 class="m-0 font-weight-bold text-primary">Evaluacion Realizadas</h5>    
     </div>
     <div class="card-body">
         <div class="table-responsive">
@@ -32,16 +28,16 @@
                     </tr>
                 </tfoot>
                 <tbody>
-                    @foreach ($evaluaciones as $item)                
+                    @foreach ($datos as $item)                
                     <tr>
-                        <td>{{$item->users_id}}</td>
-                        <td>{{$item->siniestro_id}}</td>
-                        <td>{{$item->fecha}}</td>
-                        <td>{{$item->monto}}</td>
+                        <td>{{$item['id']}}</td>
+                        <td>{{$item['siniestro_id']}}</td>
+                        <td>{{$item['name']}}</td>
+                        <td>{{$item['descripcion']}}</td>
                         <td>
          
-                            <form action="{{route('vehiculo.destroy',$item->id)}}" method="POST">
-                                <a href="{{route('vehiculo.edit',$item->id)}}"><button type="button" class="btn btn-primary"><i class="fa fa-edit"></i></button></a>    
+                            <form action="{{route('evaluacion.destroy',$item['id'])}}" method="POST">
+                                <a href="{{route('evaluacion.edit',$item['id'])}}"><button type="button" class="btn btn-primary">Ver</button></a>    
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger"><i class="fa fa-trash"></i></button>

@@ -3,10 +3,14 @@
 namespace App\Http\Controllers\admin;
 
 use App\Models\Detalle;
+use App\Models\Vehiculo;
 use App\Models\Siniestro;
 use App\Models\Evaluacion;
 use Illuminate\Http\Request;
+use App\Models\Campo_evaluacion;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class EvaluacionController extends Controller
 {
@@ -16,9 +20,26 @@ class EvaluacionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        $evaluacion = Evaluacion::all();
-        return view('admin.evaluacion.index',['evaluaciones'=>$evaluacion]);
+    {       
+        $evaluaciones = Evaluacion::all();
+        $datos = [];
+
+        foreach ($evaluaciones as $evaluacion) {
+            $campo = Campo_evaluacion::find($evaluacion->id);
+            $item = [
+                'id' => $evaluacion->id,
+                'siniestro_id' => $evaluacion->siniestro_id,
+                'name' => $campo->nombre,
+                'descripcion' => $campo->descripcion,
+                'fecha' => $campo->created_at,
+            ];
+            $datos[] = $item;
+        }
+       // dd($datos);
+
+        return view('admin.evaluacion.index',['datos'=>$datos]);
+
+        
     }
 
     /**
@@ -28,9 +49,7 @@ class EvaluacionController extends Controller
      */
     public function create()
     {
-        $sinietros = Siniestro::all();
-        $detalles = Detalle::all();
-        return view('admin.evaluacion.create',['siniestros'=>$sinietros],['detalles'=>$detalles]);
+        
     }
 
     /**
@@ -41,7 +60,38 @@ class EvaluacionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
+        
+        $evaluacion = new Evaluacion();
+        $evaluacion->users_id = Auth::user()->id;
+        $evaluacion->siniestro_id = $request->siniestro_id;
+        $evaluacion->save();
+
+        $siniestro = Siniestro::find($request->siniestro_id);
+        $siniestro->activo = 'Evaluado';
+        $siniestro->update();
+
+        $campo = new Campo_evaluacion();
+        $campo->nombre ='incidentes';
+        $campo->evaluacion_id = $evaluacion->id;
+        foreach ($request->incidentes as $value) {
+            $campo->descripcion = $campo->descripcion." ".$value;
+        }
+        $campo->save();
+
+        $campo = new Campo_evaluacion();
+        $campo->nombre ='detalle';
+        $campo->descripcion =$request->detalle;
+        $campo->evaluacion_id =  $evaluacion->id;
+        $campo->save();
+    
+        $campo = new Campo_evaluacion();
+        $campo->nombre ='costo';
+        $campo->descripcion =$request->costo ;
+        $campo->evaluacion_id =  $evaluacion->id;
+        $campo->save();
+        
+        return redirect('admin/adminsiniestro');
     }
 
     /**
@@ -52,7 +102,10 @@ class EvaluacionController extends Controller
      */
     public function show($id)
     {
-        //
+        $siniestro = Siniestro::find($id);
+        $vehiculo = Vehiculo::find($siniestro->vehiculo_id);
+    
+        return view('admin.evaluacion.create', compact('siniestro','vehiculo'));
     }
 
     /**
@@ -63,7 +116,14 @@ class EvaluacionController extends Controller
      */
     public function edit($id)
     {
-        //
+        $evaluacion = Evaluacion::find($id);
+            //$campo = Campo_evaluacion::find($id);
+            $campos = DB::table('campo_evaluacions')
+            ->where('evaluacion_id', '=', $id)
+            ->groupBy('evaluacion_id', 'id', 'nombre', 'descripcion', 'created_at', 'updated_at')
+            ->get();
+
+          return view('admin.evaluacion.show',compact('evaluacion','campos'));
     }
 
     /**

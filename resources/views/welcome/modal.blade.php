@@ -146,3 +146,99 @@
             </div>
     </div>
 </div>
+</div>
+
+
+<!-- Modal de Cotizacion -->
+
+<div class="modal fade" id="cotizacionModal" tabindex="-1" aria-labelledby="cotizacionModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="cotizacionModal">Formulario de cotizacion</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+
+                    <form action="{{url('/cotizacion')}}"  method="POST">
+                        @csrf
+                        <div class="row mb-3">
+                            <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Nombre') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="name" type="text" class="form-control" 
+                                name="name"  required autocomplete="name" autofocus>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Correo') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="email" type="text" class="form-control" name="email">
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label for="telefono" class="col-md-4 col-form-label text-md-end">{{ __('Telefono') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="telefono" type="text" class="form-control" 
+                                name="telefono" >
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label for="marca" class="col-md-4 col-form-label text-md-end">{{ __('Marca Vehiculo') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="marca" type="text" class="form-control" name="marca" >
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label for="modelo" class="col-md-4 col-form-label text-md-end">{{ __('Modelo Vehiculo') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="modelo" type="text" class="form-control" name="modelo" >
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label for="anio" class="col-md-4 col-form-label text-md-end">{{ __('Año del vehiculo') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="anio" type="number" class="form-control" name="anio" >
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label for="cobertura" class="col-md-4 col-form-label text-md-end">Tipo de cobertura:</label>
+
+                            <div class="col-md-6">
+                                <select id="cobertura" class="form-control" name="cobertura">
+                                    <option value="basica">Básica</option>
+                                    <option value="completa">Completa</option>
+                                    <option value="terceros">Terceros</option>
+                                  </select>
+                            </div>
+                      
+                        </div>
+
+                                          
+                        <div class="row mb-0">
+                            <div class="col-md-8 offset-md-4">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                <button type="submit" class="btn btn-primary">
+                                    {{ __('Cotizar') }}
+                                </button>
+                            </div>
+                        </div>
+                      </form>
+                      
+                </div>
+    </div>
+</div>
+</div>
