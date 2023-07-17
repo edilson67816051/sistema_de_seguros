@@ -19,15 +19,21 @@ class PolizaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $polizas = DB::table('polizas')
         ->where('users_id','=',Auth::user()->id)
         ->where('estado','=','1')  
         ->get();
 
-        $bitacora = new Bitacora();
-        $bitacora->bitacora('Listo las poliza');
+        $user = Auth::user();
+
+        Auth::user()->logs()->create([
+            'login_time' => now(),
+            'action' => 'Lista las polizas',
+            'ip_address' => $request->ip(),
+        ]);
+        
 
         return view('cliente.poliza.index',['polizas'=>$polizas]);
     }
@@ -85,19 +91,27 @@ class PolizaController extends Controller
 
         $poliza->save();
 
-        $this->generatepagos(request('tipo_pago'),$poliza->prima_total,request('anio'),$poliza->id);
+        $this->generatepagos($request,request('tipo_pago'),$poliza->prima_total,request('anio'),$poliza->id);
         $poliza->nro_poliza =2023*1000+$poliza->id; 
         $poliza->update(); 
-        $bitacora = new Bitacora();
-        $bitacora->bitacora('Creo un nuevo Poliza id : '.$poliza->id);
+
+        Auth::user()->logs()->create([
+            'login_time' => now(),
+            'action' => 'Creo una nueva Poliza ID: '.$poliza->id,
+            'ip_address' => $request->ip(),
+        ]);
+        
         return redirect("cliente/poliza");       
     }
 
-    public function generatepagos($tipo,$monto_total,$anio,$id){
+    public function generatepagos($request,$tipo,$monto_total,$anio,$id){
        
         if ($tipo=='m'){
-            $bitacora = new Bitacora();
-            $bitacora->bitacora('Se genero pagos de forma Mensual');
+            Auth::user()->logs()->create([
+                'login_time' => now(),
+                'action' => 'Se genero pagos de forma Mensual',
+
+            ]);
             $monto_mensual=$monto_total/($anio*12);
             $fecha_actual=Carbon::now();
             for($i=1; $i<=($anio*12);$i++){
@@ -115,8 +129,12 @@ class PolizaController extends Controller
             }
         }
         if ($tipo=='s'){
-            $bitacora = new Bitacora();
-            $bitacora->bitacora('Se genero pagos de forma Semestral');
+            Auth::user()->logs()->create([
+                'login_time' => now(),
+                'action' => 'Se genero pagos de forma Semestral',
+                'ip_address' => $request->ip(),
+            ]);
+         
             $monto_semestral=$monto_total/($anio*2);
             $fecha_actual=Carbon::now();
             for($i=1; $i<=($anio*2);$i++){
@@ -133,8 +151,11 @@ class PolizaController extends Controller
             }
         }
         if ($tipo=='a'){
-            $bitacora = new Bitacora();
-            $bitacora->bitacora('Se genero pagos de forma Anual');
+            Auth::user()->logs()->create([
+                'login_time' => now(),
+                'action' => 'Se genero pagos de forma Anual',
+                'ip_address' => $request->ip(),
+            ]);
             $monto_anual=$monto_total/($anio);
             $fecha_actual=Carbon::now();
             for($i=1; $i<=($anio);$i++){
@@ -154,12 +175,18 @@ class PolizaController extends Controller
         
     }
 
-    public function show($id)
+    public function show(Request $request,$id)
     {
         $siniestro = Siniestro::find($id);
         $imagen= Imagen::all();
-        $bitacora = new Bitacora();
-        $bitacora->bitacora('Detallo un siniestro con la id : '.$id);
+
+        Auth::user()->logs()->create([
+            'login_time' => now(),
+            'action' => 'Detallo un siniestro con la id : '.$id,
+            'ip_address' => $request->ip(),
+        ]);
+        
+
         return view('cliente.siniestro.show',['siniestro'=>$siniestro],['imagenes'=>$imagen]);
     }
 

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('nro_poliza');
             $table->timestamp('fecha_inicio');
-            $table->timestamp('fecha_final');
+            $table->timestamp('fecha_final')->nullable();
             $table->string('moneda');
             $table->string('tipo_pago');
             $table->double('prima_neta');   

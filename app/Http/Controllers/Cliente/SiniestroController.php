@@ -17,11 +17,16 @@ class SiniestroController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $siniestro = Siniestro::all();
-        $bitacora = new Bitacora();
-        $bitacora->bitacora('Listo los siniestro que a reportado');
+
+         Auth::user()->logs()->create([
+               'login_time' => now(),
+                'action' => 'Lista de los sinisetro',
+                'ip_address' => $request->ip(),
+            ]);
+
         return view('cliente.siniestro.index',['siniestro'=>$siniestro]);
     }
 
@@ -83,8 +88,14 @@ class SiniestroController extends Controller
                 $imagen->save();
             }
         }
-        $bitacora = new Bitacora();
-        $bitacora->bitacora('Reporto un siniestro con el codigo :'.$siniestro->id);
+
+        Auth::user()->logs()->create([
+            'login_time' => now(),
+            'action' => 'Reporto un siniestro con el codigo :'.$siniestro->id,
+            'ip_address' => $request->ip(),
+        ]);
+
+
         return redirect('cliente/siniestro');
     }
 
@@ -97,12 +108,17 @@ class SiniestroController extends Controller
         
     }
 
-    public function show($id)
+    public function show(Request $request,$id)
     {
         $siniestro = Siniestro::find($id);
         $imagen= Imagen::all();
-        $bitacora = new Bitacora();
-        $bitacora->bitacora('Detallo un siniestro la id :'.$siniestro->id);
+        
+        Auth::user()->logs()->create([
+            'login_time' => now(),
+             'action' =>'Detallo un siniestro la id :'.$siniestro->id,
+             'ip_address' => $request->ip(),
+         ]);
+       
         return view('cliente.siniestro.show',['siniestro'=>$siniestro],['imagenes'=>$imagen]);
     }
 
@@ -138,13 +154,18 @@ class SiniestroController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request,$id)
     {
         $siniestro = Siniestro::find($id);
         $siniestro->estado=0;
         $siniestro->save();
-        $bitacora = new Bitacora();
-        $bitacora->bitacora('Elimino el siniestro con la id :'.$siniestro->id);
+
+        Auth::user()->logs()->create([
+            'login_time' => now(),
+             'action' =>'Elimino el siniestro con la id :'.$siniestro->id,
+             'ip_address' => $request->ip(),
+         ]);
+
         return redirect('cliente/siniestro');
     }
 }

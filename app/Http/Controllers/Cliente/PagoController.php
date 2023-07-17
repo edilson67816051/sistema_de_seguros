@@ -20,14 +20,18 @@ class PagoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $polizas = DB::table('polizas')
         ->where('users_id','=',Auth::user()->id)
         ->where('estado','=','1')
         ->get();
-        $bitacora = new Bitacora();
-        $bitacora->bitacora('Listo los pagos');
+        Auth::user()->logs()->create([
+            'login_time' => now(),
+            'action' => 'Listo Los Pagos',
+            'ip_address' => $request->ip(),
+        ]);
+        
         return view('cliente.pago.index',['polizas'=>$polizas]);
     }
 
@@ -56,12 +60,16 @@ class PagoController extends Controller
         
     }
 
-    public function metodopago(Request $request,$id)
+    public function metodopago($id,Request $request)
     {
         $pago = Pago::find($id);
 
-        $bitacora = new Bitacora();
-        $bitacora->bitacora('Seleciono el metodo de Pago '.request('metodo_pago'));
+        Auth::user()->logs()->create([
+            'login_time' => now(),
+            'action' => 'Selecciono el metodo de pago',
+            'ip_address' => $request->ip(),
+        ]);
+        
 
         if (request('metodo_pago')=='Qr')
             return view('cliente.pago.pagoqr',['pago'=>$pago]);
@@ -93,8 +101,12 @@ class PagoController extends Controller
         $poliza->activo =1;
         $poliza->update();
 
-        $bitacora = new Bitacora();
-        $bitacora->bitacora('Se realizo el pago con Qr la id de la transaccion :'.$pago->id);
+        Auth::user()->logs()->create([
+            'login_time' => now(),
+            'action' => 'Se realizo el pago con Qr la id de la transaccion :'.$pago->id,
+            'ip_address' => $request->ip(),
+        ]);
+        
         return redirect('/cliente/pago');
     }
 
@@ -125,14 +137,23 @@ class PagoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request,$id)
     {
         $poliza = Poliza::find($id);
         $pago = Pago::
         where('poliza_id', $poliza->id)
-            ->get();
-            $bitacora = new Bitacora();
-            $bitacora->bitacora('Observo la Historia de Pago de la poliza :'.$poliza->nro_poliza);    
+            ->get();   
+
+            Auth::user()->logs()->create([
+                'login_time' => now(),
+                'action' => 'Observo la Historia de Pago de la poliza :'.$poliza->nro_poliza,
+                'ip_address' => $request->ip(),
+            ]);
+            
+            
+
+
+
         return view('cliente.pago.show', ['pago'=>$pago]);
     }
 

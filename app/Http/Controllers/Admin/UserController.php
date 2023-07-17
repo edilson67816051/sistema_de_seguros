@@ -33,6 +33,12 @@ class UserController extends Controller
             ->orderBy('id','asc')
             ->paginate(3);
 
+            $user = Auth::user();
+            $user->logs()->create([
+                'action' => 'Lista de los usuarios',
+                'ip_address' => $request->ip(),
+            ]);
+
         return view('admin.users.index',['users'=>$users,'texto'=>$texto]);
     }
 
@@ -57,6 +63,13 @@ class UserController extends Controller
             $user->usuario = 1;
             $user->estado = 1;
             $user->save();
+
+            $user = Auth::user();
+
+            $user->logs()->create([
+                'action' => 'Creo un nuevo usuario',
+                'ip_address' => $request->ip(),
+            ]);
 
             return redirect('/admin/users')->with('success', 'El usuario se ha registrado correctamente.');
         } catch (QueryException $exception) {
@@ -88,6 +101,7 @@ class UserController extends Controller
     {
         $roles = Role::all();
         $user = User::findOrFail($id);
+        
         return view('admin.users.edit', compact('user','roles'));
     }
 

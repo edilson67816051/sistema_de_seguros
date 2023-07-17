@@ -15,16 +15,20 @@ use App\Providers\RouteServiceProvider;
 
 class VehiculoController extends Controller
 {
-       public function index()
+       public function index(Request $request)
     {
         $vehiculos = DB::table('vehiculos')
         ->where('users_id','=',Auth::user()->id)
         ->where('estado','=','1')
         ->get();
 
-        $bitacora = new Bitacora();
-        $bitacora->bitacora('visito los vehiculos');
-        
+        $user = Auth::user();
+        $user->logs()->create([
+            'login_time' => now(),
+            'action' => 'Lista de los Vehiculos',
+            'ip_address' => $request->ip(),
+        ]);
+
         return view('cliente.vehiculo.index',['vehiculos'=>$vehiculos]);
     }
 
@@ -59,8 +63,12 @@ class VehiculoController extends Controller
             $vehiculo->path="http://192.168.100.180:8000/imagenes/vehiculos/".$nombre;
         }
         $vehiculo->save();
-        $bitacora = new Bitacora();
-        $bitacora->bitacora('Creo un nuevo vehiculos');
+        
+        Auth::user()->logs()->create([
+            'login_time' => now(),
+            'action' => 'Crea Un nuevo Vehiculo asociado ala ID: '.$vehiculo->id,
+            'ip_address' => $request->ip(),
+        ]);
         return redirect('/cliente/vehiculo');
     }
 
@@ -102,21 +110,27 @@ class VehiculoController extends Controller
         }
         $vehiculo->update();
 
-        $bitacora = new Bitacora();
-        $bitacora->bitacora('Modifico un vehiculos');
+        Auth::user()->logs()->create([
+            'login_time' => now(),
+            'action' => 'Edito Vehiculo asociado ala ID: '.$vehiculo->id,
+            'ip_address' => $request->ip(),
+        ]);
         
         return redirect('/cliente/vehiculo');
     }
 
-    public function destroy($id)
+    public function destroy(Request $request,$id)
     {
         $vehiculo = Vehiculo::find($id);
         $vehiculo -> estado=0;
 
         $vehiculo->update();
 
-        $bitacora = new Bitacora();
-        $bitacora->bitacora('Elimino un vehiculo');
+        Auth::user()->logs()->create([
+            'login_time' => now(),
+            'action' => 'Elimino Vehiculo asociado ala ID: '.$vehiculo->id,
+            'ip_address' => $request->ip(),
+        ]);
 
         return redirect()->route('vehiculo.index');
     }
