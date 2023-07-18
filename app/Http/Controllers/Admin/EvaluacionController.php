@@ -19,7 +19,7 @@ class EvaluacionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {       
         $evaluaciones = Evaluacion::all();
         $datos = [];
@@ -35,7 +35,12 @@ class EvaluacionController extends Controller
             ];
             $datos[] = $item;
         }
-       // dd($datos);
+       
+        Auth::user()->logs()->create([
+            'login_time' => now(),
+            'action' => 'Lista Las Evaluaciones',
+            'ip_address' => $request->ip(),
+        ]);
 
         return view('admin.evaluacion.index',['datos'=>$datos]);
 

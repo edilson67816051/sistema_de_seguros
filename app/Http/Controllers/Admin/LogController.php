@@ -2,27 +2,28 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Imagen;
-use App\Models\Bitacora;
-use App\Models\Siniestro;
+use App\Models\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 
-class SiniestroController extends Controller
+class LogController extends Controller
 {
-    
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index(Request $request)
     {
-        $siniestro = Siniestro::all();
+        $texto=trim($request->get('texto'));
 
-        Auth::user()->logs()->create([
-            'login_time' => now(),
-            'action' => 'Listo Los Siniestro',
-            'ip_address' => $request->ip(),
-        ]);
-        return view('admin.siniestro.index',['siniestro'=>$siniestro]);
+        $bitacora = DB::table('logs')
+            ->select('id','user_id','ip_address','action','created_at','updated_at')
+            ->where('user_id','LIKE','%'.$texto.'%')
+            ->orderBy('id','asc')
+            ->paginate(10);
+        return view('admin.bitacora.index',compact('bitacora','texto'));
     }
 
     /**
@@ -52,20 +53,9 @@ class SiniestroController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request,$id)
+    public function show($id)
     {
-        $siniestro = Siniestro::find($id);
-        $imagen = DB::table('imagens')
-        ->where('siniestro_id','=',$siniestro->id)
-        ->get(); 
-
-        Auth::user()->logs()->create([
-            'login_time' => now(),
-            'action' => 'Detallo un siniestro con el codigo :'.$siniestro->id,
-            'ip_address' => $request->ip(),
-        ]);
-
-        return view('admin.siniestro.show',['siniestro'=>$siniestro],['imagenes'=>$imagen]);
+        //
     }
 
     /**

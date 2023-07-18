@@ -19,7 +19,11 @@ class SiniestroController extends Controller
      */
     public function index(Request $request)
     {
-        $siniestro = Siniestro::all();
+      
+        $siniestro = DB::table('siniestros')
+        ->where('users_id','=',Auth::user()->id)
+        ->where('estado','=','1')
+        ->get();
 
          Auth::user()->logs()->create([
                'login_time' => now(),
@@ -111,7 +115,9 @@ class SiniestroController extends Controller
     public function show(Request $request,$id)
     {
         $siniestro = Siniestro::find($id);
-        $imagen= Imagen::all();
+        $imagen = DB::table('imagens')
+        ->where('siniestro_id','=',$siniestro->id)
+        ->get();   
         
         Auth::user()->logs()->create([
             'login_time' => now(),

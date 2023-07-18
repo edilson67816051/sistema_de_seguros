@@ -28,8 +28,8 @@
                         <th>Codigo Usuario</th>
                         <th>Fecha Inico</th>
                         <th>Fecha Final</th>
-                        <th>Tiempo en el sistema</th>
-                        <th>Opciones</th>
+                        <th>Ip address</address></th>
+                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -41,28 +41,20 @@
                     @foreach ($bitacora as $item)                
                     <tr>
                         <td>{{$item->id}}</td>
-                        <td>{{$item->users_id}}</td>
+                        <td>{{$item->user_id}}</td>
                         <td>{{$item->created_at}}</td>
                         <td>{{$item->updated_at}}</td>
-                        <td>
-                            {{
-                               \Carbon\Carbon::parse($item->created_at)->format('i')
-                            }}
-                        </td>
-                        <td>
-         
-                            <form action="{{route('vehiculo.destroy',$item->id)}}" method="POST">
-                                <a href="{{route('bitacora.show',$item->id)}}"><button type="button" class="btn btn-primary">Operaciones</button></a>    
-                                @csrf
-                                @method('DELETE')
-                             </form>
-                          </td>
+                        <td>{{$item->ip_address}}</td>
+                        <td>{{$item->action}}</td>
                     </tr>
 
                     @endforeach
                     @endif    
                 </tbody>
             </table>
+            <div class="d-flex justify-content-center">
+                {{ $bitacora->links() }}
+            </div>
         </div>
     </div>
 

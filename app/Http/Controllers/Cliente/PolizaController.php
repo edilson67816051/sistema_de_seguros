@@ -73,9 +73,13 @@ class PolizaController extends Controller
         foreach ($cobertura as $item){
             if (request()->has($item->id)) {
                 $prima_total=$prima_total+$item->costo;
-                $cobertura_selecionada[]=$item;              
+                $cobertura_selecionada[]=$item;             
             }
         }
+
+       // dd( $cobertura_selecionada);
+
+
         if($cobertura_selecionada == null)
                 return redirect("cliente/poliza/create");
 
@@ -90,6 +94,16 @@ class PolizaController extends Controller
         $poliza->activo = 0;
 
         $poliza->save();
+
+
+        foreach ($cobertura as $item){
+            if (request()->has($item->id)) {
+                DB::table('poliza_coberturas')->insert([
+                    'poliza_id' => $poliza->id,
+                    'cobertura_id' => $item->id,
+                ]);             
+            }
+        }
 
         $this->generatepagos($request,request('tipo_pago'),$poliza->prima_total,request('anio'),$poliza->id);
         $poliza->nro_poliza =2023*1000+$poliza->id; 
@@ -110,7 +124,7 @@ class PolizaController extends Controller
             Auth::user()->logs()->create([
                 'login_time' => now(),
                 'action' => 'Se genero pagos de forma Mensual',
-
+                'ip_address' => $request->ip(),
             ]);
             $monto_mensual=$monto_total/($anio*12);
             $fecha_actual=Carbon::now();
