@@ -8,4 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class Cotizacion extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'name',
+        'email',
+        'telefono',
+        'marca',
+        'modelo',
+        'cobertura',
+        'anio',
+        'costo',
+    ];
 }
