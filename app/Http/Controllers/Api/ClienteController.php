@@ -14,6 +14,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Cotizacion;
 use Illuminate\Support\Facades\Auth;
 
+use App\Models\Cobertura;
+
 class ClienteController extends Controller
 {
 
@@ -157,8 +159,35 @@ class ClienteController extends Controller
     //TODO: REALIZACION DE COTIZACION
     public function crearCotizacion(Request $request)
     {
-        $crearCotizacion = new Cotizacion($request->all());
-        $crearCotizacion->save();
+        $cotizacion = new Cotizacion();
+
+        $cotizacion->name = request('name');
+        $cotizacion->email= request('email');
+        $cotizacion->telefono = request('telefono');
+        $cotizacion->marca = request('marca');
+        $cotizacion->modelo = request('modelo');
+        $cotizacion->anio = request('anio');
+        
+        $texto= request('cobertura').' : El seguro Cubrira  ';
+
+        if(request('cobertura')== 'completa'){
+
+            $coberturas = Cobertura::all();
+            foreach ($coberturas as $covertura){
+                $texto = $texto.' '.$covertura->nombre;
+                $cotizacion->costo=$cotizacion->costo+ $covertura->costo;
+            }         
+        }else{
+            if(request('cobertura')== 'terceros'){
+
+                $coberturas = Cobertura::find(1);
+                $texto = $texto.' '.$coberturas->nombre;
+                $cotizacion->costo = $coberturas->costo;        
+            }
+        }     
+        $cotizacion->cobertura = $texto;
+
+        $cotizacion->save();
         return $this->success(
             "Creado Correctamente",
 

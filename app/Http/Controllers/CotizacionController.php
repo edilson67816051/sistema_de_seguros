@@ -23,7 +23,6 @@ class CotizacionController extends Controller
         $cotizacion->telefono = request('telefono');
         $cotizacion->marca = request('marca');
         $cotizacion->telefono = request('telefono');
-        $cotizacion->marca = request('marca');
         $cotizacion->modelo = request('modelo');
         $cotizacion->anio = request('anio');
         
