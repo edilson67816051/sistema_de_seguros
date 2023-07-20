@@ -15,6 +15,8 @@ use App\Models\Cotizacion;
 use Illuminate\Support\Facades\Auth;
 
 use App\Models\Cobertura;
+use App\Models\Imagen;
+use App\Models\Siniestro;
 
 class ClienteController extends Controller
 {
@@ -167,7 +169,7 @@ class ClienteController extends Controller
         $cotizacion->marca = request('marca');
         $cotizacion->modelo = request('modelo');
         $cotizacion->anio = request('anio');
-        
+
         $texto= request('cobertura').' : El seguro Cubrira  ';
 
         if(request('cobertura')== 'completa'){
@@ -176,18 +178,93 @@ class ClienteController extends Controller
             foreach ($coberturas as $covertura){
                 $texto = $texto.' '.$covertura->nombre;
                 $cotizacion->costo=$cotizacion->costo+ $covertura->costo;
-            }         
+            }
         }else{
             if(request('cobertura')== 'terceros'){
 
                 $coberturas = Cobertura::find(1);
                 $texto = $texto.' '.$coberturas->nombre;
-                $cotizacion->costo = $coberturas->costo;        
+                $cotizacion->costo = $coberturas->costo;
             }
-        }     
+        }
         $cotizacion->cobertura = $texto;
 
         $cotizacion->save();
+        return $this->success(
+            "Creado Correctamente",
+
+        );
+    }
+
+    public function listarSiniestros(){
+        $siniestro = DB::table('siniestros')
+        ->where('users_id','=',Auth::user()->id)
+        ->where('estado','=','1')
+        ->get();
+
+        return $this->success(
+            "Siniestros",
+            $siniestro->toArray(),
+        );
+    }
+
+    public function listaDeVehiculos(){
+        $vehiculos = DB::table('vehiculos')
+        ->where('users_id','=',Auth::user()->id)
+        ->where('estado','=','1')
+        ->get();
+
+        return $this->success(
+            "Vehiculos",
+            $vehiculos->toArray(),
+        );
+    }
+
+
+    public function crearSiniestro(Request $request){
+        $latitud= request('latitud');
+        $longitud= request('longitud');
+
+        $vehiculo = request('vehiculo');
+        $detalle = request('detalle');
+        $fecha = request('fecha');
+
+
+
+
+
+        $siniestro = new Siniestro();
+
+        $siniestro->fecha_siniestro= $fecha;
+        $siniestro->detalle = $detalle;
+        $siniestro->vehiculo_id = $vehiculo;
+        $siniestro->users_id= Auth::user()->id;
+        $siniestro->latitud = $latitud;
+        $siniestro->longitud=$longitud;
+
+        $siniestro->activo='Inactivo';
+        $siniestro->estado=1;
+        $siniestro->save();
+
+        if($files = request()->file('imagenes')){
+            foreach ($files as $file){
+                $nombre = md5(rand(1000,10000)).'.'.$file->getClientOriginalExtension();
+                $url=public_path('imagenes/siniestro');
+                $file->move($url,$nombre);
+                $imagen = new Imagen();
+                $imagen->siniestro_id=$siniestro->id;
+                $imagen->upload_path='imagenes/siniestro/';
+                $imagen->nombre=$nombre;
+                $imagen->save();
+            }
+        }
+
+        Auth::user()->logs()->create([
+            'login_time' => now(),
+            'action' => 'Reporto un siniestro con el codigo :'.$siniestro->id,
+            'ip_address' => $request->ip(),
+        ]);
+
         return $this->success(
             "Creado Correctamente",
 

@@ -33,5 +33,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post("/eliminarVehiculo", [ClienteController::class, "eliminarVehiculo"]);
     Route::get("/listaPagos", [ClienteController::class, "ListarPagos"]);
     Route::post("/detallePago", [ClienteController::class, "DetallePago"]);
+    Route::get("/listaSiniestro", [ClienteController::class, "listarSiniestros"]);
+    Route::get("/listaVehiculos", [ClienteController::class, "listaDeVehiculos"]);
+    Route::post("/registrarSiniestro", [ClienteController::class, "crearSiniestro"]);
 
 });
